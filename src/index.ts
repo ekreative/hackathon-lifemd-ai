@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import multer from "multer";
 import runLifeMdAgent from "./agent/index.js";
-import { openai } from "./mcp/index.js";
+import { openai } from "./mcp/openai.js";
 import { toFile } from "openai/uploads";
 
 interface AIRequestBody {
