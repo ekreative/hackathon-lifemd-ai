@@ -47,6 +47,10 @@ npm start             # run compiled server (build runs automatically first)
 - The `/api/voice` endpoint depends on `multer` for in-memory uploads and `openai/audio.transcriptions.create` with `toFile` helper from the OpenAI SDK.
 
 ### Code Structure Cheat Sheet
+- `src/index.ts` – bootstraps Express, mounts shared middleware, and wires the modular routers.
+- `src/routes/` – houses one router per HTTP surface (`ai.ts` for text prompts, `voice.ts` for uploads). Each router handles its own middleware stack (e.g., Multer for voice) and uses shared helpers.
+- `src/utils/` – reusable HTTP helpers (`http.ts`) and validation logic (`validation.ts`) that enforce consistent error messaging and request limits.
+- `src/config.ts` / `src/errors.ts` – central place for environment-driven settings and HTTP-friendly error types.
 - `src/mcp/` – contains the MCP server exposed to the agent. `openai.ts` wires the shared SDK client, `tools/` holds one file per MCP tool plus a `createAdviceTool` factory, and `index.ts` simply registers everything.
 - `src/agent/` – mirrors the same idea for the agent runtime. `openai.ts` validates the API key and sets the default key for `@openai/agents`, `mcpServer.ts` handles child-process lifecycle + shutdown hooks, `lifeMdAgent.ts` defines the agent persona, and `index.ts` exports `runLifeMdAgent` for the HTTP layer.
 - When adding a new tool or agent behavior, drop a new file in the respective folder and export it through the local `index.ts` barrel to keep each concern isolated.
