@@ -25,6 +25,56 @@ const mcpServer = fs.existsSync(distMcpEntryPoint)
           args: ["--loader", "ts-node/esm", srcMcpEntryPoint, "--stdio"],
       });
 
+let connectPromise: Promise<void> | null = null;
+let isConnected = false;
+let isClosing = false;
+
+const ensureMcpConnection = async (): Promise<void> => {
+    if (isClosing) {
+        throw new Error("MCP server is shutting down");
+    }
+
+    if (!connectPromise) {
+        connectPromise = mcpServer
+            .connect()
+            .then(() => {
+                isConnected = true;
+            })
+            .catch((err) => {
+                connectPromise = null;
+                throw err;
+            });
+    }
+
+    await connectPromise;
+};
+
+const closeMcpConnection = async (): Promise<void> => {
+    if (!isConnected || isClosing) {
+        return;
+    }
+    isClosing = true;
+    try {
+        await mcpServer.close();
+    } finally {
+        isConnected = false;
+    }
+};
+
+(["SIGINT", "SIGTERM"] as NodeJS.Signals[]).forEach((signal) => {
+    process.once(signal, () => {
+        closeMcpConnection().catch((err) => {
+            console.error("Failed to close MCP server", err);
+        });
+    });
+});
+
+process.once("beforeExit", () => {
+    closeMcpConnection().catch((err) => {
+        console.error("Failed to close MCP server", err);
+    });
+});
+
 const lifeMdAgent = new Agent({
     name: "LifeMD Health Assistant",
     model: "gpt-4o-mini",
@@ -48,19 +98,14 @@ const lifeMdAgent = new Agent({
 });
 
 // Хелпер щоб бекенд міг просто викликати агент
-const runLifeMdAgent= async (message: string): Promise<string>  => {
-    // За бажанням можна зробити connect() один раз на старт
-    await mcpServer.connect();
-    try {
-        const result = await run(lifeMdAgent, message);
-        const finalOutput = result.finalOutput;
-        if (typeof finalOutput === "string") {
-            return finalOutput;
-        }
-        throw new Error("Agent did not produce a textual response");
-    } finally {
-        await mcpServer.close();
+const runLifeMdAgent = async (message: string): Promise<string> => {
+    await ensureMcpConnection();
+    const result = await run(lifeMdAgent, message);
+    const finalOutput = result.finalOutput;
+    if (typeof finalOutput === "string") {
+        return finalOutput;
     }
-}
+    throw new Error("Agent did not produce a textual response");
+};
 
 export default runLifeMdAgent;

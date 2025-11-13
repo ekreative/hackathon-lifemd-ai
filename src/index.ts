@@ -10,32 +10,54 @@ interface AIRequestBody {
     message?: string;
 }
 
+class BadRequestError extends Error {}
+
 dotenv.config();
+
+const MAX_MESSAGE_LENGTH = Number(process.env.MAX_MESSAGE_LENGTH ?? 4000);
+
+const validateMessage = (message: unknown, fieldName: string): string => {
+    if (typeof message !== "string") {
+        throw new BadRequestError(`${fieldName} must be a string`);
+    }
+    const normalized = message.trim();
+    if (!normalized) {
+        throw new BadRequestError(`${fieldName} is required`);
+    }
+    if (normalized.length > MAX_MESSAGE_LENGTH) {
+        throw new BadRequestError(`${fieldName} exceeds ${MAX_MESSAGE_LENGTH} characters`);
+    }
+    return normalized;
+};
+
+const respondWithError = (
+    res: Response,
+    status: number,
+    message: string,
+    metadata?: Record<string, unknown>
+) => res.status(status).json({ error: message, ...metadata });
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 
 const upload = multer({ storage: multer.memoryStorage() });
 
-app.post("/api/ai", async (
-    req: Request<unknown, unknown, AIRequestBody>,
-    res: Response
-) => {
-    try {
-        const { message } = req.body ?? {};
-        if (typeof message !== "string" || message.trim().length === 0) {
-            return res.status(400).json({ error: "message is required" });
+app.post(
+    "/api/ai",
+    async (req: Request<unknown, unknown, AIRequestBody>, res: Response) => {
+        try {
+            const { message } = req.body ?? {};
+            const normalized = validateMessage(message, "message");
+            const answer = await runLifeMdAgent(normalized);
+            res.json({ answer });
+        } catch (err) {
+            console.error("AI error:", err);
+            const status = err instanceof BadRequestError ? 400 : 500;
+            respondWithError(res, status, err instanceof Error ? err.message : "AI error");
         }
-
-        const answer = await runLifeMdAgent(message);
-
-        res.json({ answer });
-    } catch (err) {
-        console.error("AI error:", err);
-        res.status(500).json({ error: "AI error" });
     }
-});
+);
 
 // 🔹 Новий голосовий ендпоінт
 app.post("/api/voice", upload.single("audio"), async (req, res) => {
@@ -43,35 +65,29 @@ app.post("/api/voice", upload.single("audio"), async (req, res) => {
         const file = req.file;
 
         if (!file) {
-            return res.status(400).json({ error: "audio file is required" });
+            return respondWithError(res, 400, "audio file is required");
         }
 
-        // 1) Отримаємо транскрипцію від OpenAI
-        // Модель може бути типу "gpt-4o-mini-transcribe" або "whisper-1" – залежно від того, що у вас дозволено.
         const audioFile = await toFile(file.buffer, file.originalname || "audio.webm");
 
         const transcription = await openai.audio.transcriptions.create({
-            // якщо у вас ще whisper:
             model: "gpt-4o-mini-transcribe",
             file: audioFile,
-            // optional:
-            // language: "uk", // якщо хочеш явно вказати
         });
 
-        const text = transcription.text;
-        console.log("Transcribed text:", text);
+        const transcript = validateMessage(transcription.text, "transcript");
+        console.log("Transcribed text:", transcript);
 
-        // 2) Кидаємо текст в твій LifeMD агент
-        const answer = await runLifeMdAgent(text);
+        const answer = await runLifeMdAgent(transcript);
 
-        // 3) Повертаємо і транскрипт, і відповідь агента
         res.json({
-            transcript: text,
+            transcript,
             answer,
         });
     } catch (err) {
         console.error("Voice API error:", err);
-        res.status(500).json({ error: "Voice processing failed" });
+        const status = err instanceof BadRequestError ? 400 : 500;
+        respondWithError(res, status, err instanceof Error ? err.message : "Voice processing failed");
     }
 });
 
