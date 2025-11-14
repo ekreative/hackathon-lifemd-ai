@@ -16,8 +16,12 @@ aiRouter.post(
         try {
             const { message } = req.body ?? {};
             const normalized = validateMessage(message, "message");
-            const answer = await runLifeMdAgent(normalized);
-            res.json({ answer });
+            const response = await runLifeMdAgent(normalized);
+            // Return both message and optional navigate field
+            res.json({ 
+                answer: response.message,
+                ...(response.navigate && { navigate: response.navigate })
+            });
         } catch (err) {
             console.error("AI error:", err);
             const status = err instanceof BadRequestError ? 400 : 500;
