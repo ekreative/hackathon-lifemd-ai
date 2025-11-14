@@ -2,10 +2,10 @@ import { z } from "zod/v3";
 import { createAdviceTool } from "./createAdviceTool.js";
 import type { ToolRegistration } from "./types.js";
 
-const mentalTool: ToolRegistration = {
-    name: "mental_support",
+const mentalHealthTool: ToolRegistration = {
+    name: "mental_health_tool",
     schema: {
-        title: "Mental Health Support",
+        title: "Mental Health Tool",
         description: "Advice on sleep, anxiety, stress, and emotional wellbeing.",
         inputSchema: {
             question: z.string(),
@@ -15,10 +15,10 @@ const mentalTool: ToolRegistration = {
         },
     },
     handler: createAdviceTool(`
-You are the LifeMD mental coach.
+You are the LifeMD mental health coach.
 Speak very empathetically and supportively, offering gentle self-help techniques.
-Do not provide psychiatric diagnoses.
+Do not provide psychiatric diagnoses or medication guidance.
 `),
 };
 
-export default mentalTool;
+export default mentalHealthTool;
