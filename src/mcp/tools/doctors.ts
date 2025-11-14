@@ -33,19 +33,19 @@ interface Doctor {
   languages: string[];
   name: string;
   fullName: string;
-  platformSpecialties: string[];
+  schedule?: string[];
   programs?: string[];
 }
 
-// Ключові слова для програм
+// Keywords for programs
 const programKeywords = [
-  { key: "womens_health_tool", words: ["women", "gynecology", "female", "cycle", "postpartum", "womens health", "жіноче здоров'я", "гінеколог"] },
-  { key: "weight_management_tool", words: ["weight", "diet", "nutrition", "obesity", "food", "weight management", "дієта", "вага", "харчування"] },
-  { key: "mental_health_tool", words: ["mental", "psychology", "psychiatry", "stress", "anxiety", "sleep", "psych", "mental health", "психолог", "психіатр", "стрес", "депресія"] }
+  { key: "womens_health_tool", words: ["women", "gynecology", "female", "cycle", "postpartum", "womens health", "gynecology"] },
+  { key: "weight_management_tool", words: ["weight", "diet", "nutrition", "obesity", "food", "weight management", "diet", "weight", "nutrition"] },
+  { key: "mental_health_tool", words: ["mental", "psychology", "psychiatry", "stress", "anxiety", "sleep", "psych", "mental health", "psychologist", "psychiatrist", "stress", "depression"] }
 ];
 
 function formatDoctorShort(doc: Doctor): string {
-  return `${doc.fullName} - ${doc.platformSpecialties.join(", ")}`;
+  return `${doc.fullName} (${doc.programs?.join(", ") ?? "No program"})`;
 }
 
 function formatDoctorFull(doc: Doctor): string {
@@ -55,7 +55,7 @@ function formatDoctorFull(doc: Doctor): string {
   }
   return `Doctor: ${doc.fullName}
 Status: ${doc.status}
-Specialties: ${doc.platformSpecialties.join(", ")}
+Programs: ${doc.programs?.join(", ") ?? "No program"}
 Active States: ${doc.activeStates.join(", ")}
 Languages: ${doc.languages.join(", ")}
 Email: ${doc.email}
@@ -84,7 +84,7 @@ const doctorsTool: ToolRegistration = {
       question: z
         .string()
         .describe(
-          "Search query: 'list', 'specialty:X', 'doctor:Name', 'search:problem', 'schedule:Name', or 'schedules'"
+          "Search query: 'list', 'doctor:Name', 'search:problem', 'schedule:Name', or 'schedules'"
         ),
     },
     outputSchema: {
@@ -103,17 +103,16 @@ const doctorsTool: ToolRegistration = {
       if (program.words.some(w => q.includes(w))) {
         const matches = activeDoctors.filter(doc => doc.programs && doc.programs.includes(program.key));
         if (matches.length > 0) {
-          const list = matches.map(formatDoctorShort).join("");
-          const result = `Ось лікарі, які можуть допомогти з цією проблемою:
-${list}`;
+          const list = matches.map(formatDoctorShort).join("\n");
+          const result = `Here are doctors who can help with this issue:\n${list}`;
           return {
-            content: [{ type: "text", text: result }],
+            content: [{ type: "text" as const, text: result }],
             structuredContent: { result },
           };
         } else {
-          const result = `Наразі немає лікарів, які спеціалізуються на цій програмі.`;
+          const result = `Currently, there are no doctors specializing in this program.`;
           return {
-            content: [{ type: "text", text: result }],
+            content: [{ type: "text" as const, text: result }],
             structuredContent: { result },
           };
         }
@@ -144,7 +143,6 @@ ${list}`;
     }
 
     // 2. If query is about a specific doctor's schedule (flexible matching)
-    // Try to extract doctor name from query if any schedule keyword is present
     for (const doc of allDoctors) {
       const nameLower = doc.fullName.toLowerCase();
       if (q.includes(nameLower) && scheduleKeywords.some(k => q.includes(k))) {
@@ -193,31 +191,6 @@ ${list}`;
       };
     }
 
-    // Case 2: Search by specialty
-    if (q.startsWith("specialty:")) {
-      const specialty = q.replace("specialty:", "").trim();
-      const matches = activeDoctors.filter((doc) =>
-        doc.platformSpecialties.some((s) => s.toLowerCase().includes(specialty))
-      );
-
-      if (matches.length === 0) {
-        const result = `We have doctors with various specialties, but I couldn't find an exact match. Our specialties include: ${[
-          ...new Set(activeDoctors.flatMap((d) => d.platformSpecialties)),
-        ].join(", ")}`;
-        return {
-          content: [{ type: "text" as const, text: result }],
-          structuredContent: { result },
-        };
-      }
-
-      const list = matches.map(formatDoctorShort).join("\n");
-      const result = `Doctors with ${specialty} specialty:\n\n${list}`;
-      return {
-        content: [{ type: "text" as const, text: result }],
-        structuredContent: { result },
-      };
-    }
-
     // Case 3: Get specific doctor details
     if (q.startsWith("doctor:")) {
       const name = q.replace("doctor:", "").trim();
@@ -242,32 +215,8 @@ ${list}`;
       };
     }
 
-    // Case 4: Search by health problem/specialty keywords
-    if (q.startsWith("search:")) {
-      const searchTerm = q.replace("search:", "").trim();
-      const matches = activeDoctors.filter((doc) =>
-        doc.platformSpecialties.some((s) =>
-          s.toLowerCase().includes(searchTerm)
-        )
-      );
-
-      if (matches.length > 0) {
-        const specialties = [
-          ...new Set(matches.flatMap((d) => d.platformSpecialties)),
-        ];
-        const list = matches.slice(0, 5).map(formatDoctorShort).join("\n");
-        const result = `For your concern, these specialties might help: ${specialties.join(
-          ", "
-        )}\n\nRecommended doctors:\n\n${list}`;
-        return {
-          content: [{ type: "text" as const, text: result }],
-          structuredContent: { result },
-        };
-      }
-    }
-
     // Default: general response
-    const result = `I can help you find doctors on our platform. You can ask to see our available doctors, search by specialty, or get details about a specific doctor.`;
+    const result = `I can help you find doctors on our platform. You can ask to see our available doctors or get details about a specific doctor.`;
     return {
       content: [{ type: "text" as const, text: result }],
       structuredContent: { result },
