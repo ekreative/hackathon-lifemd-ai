@@ -34,7 +34,15 @@ interface Doctor {
   name: string;
   fullName: string;
   platformSpecialties: string[];
+  programs?: string[]; // Додаємо поле для програм
 }
+
+// Ключові слова для програм
+const programKeywords = [
+  { key: "womens_health_tool", words: ["women", "gynecology", "female", "cycle", "postpartum", "womens health", "жіноче здоров'я", "гінеколог"] },
+  { key: "weight_management_tool", words: ["weight", "diet", "nutrition", "obesity", "food", "weight management", "дієта", "вага", "харчування"] },
+  { key: "mental_health_tool", words: ["mental", "psychology", "psychiatry", "stress", "anxiety", "sleep", "psych", "mental health", "психолог", "психіатр", "стрес", "депресія"] }
+];
 
 function formatDoctorShort(doc: Doctor): string {
   return `${doc.fullName} - ${doc.platformSpecialties.join(", ")}`;
@@ -75,6 +83,28 @@ const doctorsTool: ToolRegistration = {
     const activeDoctors = getActiveDoctors(allDoctors);
 
     const q = question.trim().toLowerCase();
+
+    // Перевірка на запит про програму
+    for (const program of programKeywords) {
+      if (program.words.some(w => q.includes(w))) {
+        const matches = activeDoctors.filter(doc => doc.programs && doc.programs.includes(program.key));
+        if (matches.length > 0) {
+          const list = matches.map(formatDoctorShort).join("");
+          const result = `Ось лікарі, які можуть допомогти з цією проблемою:
+${list}`;
+          return {
+            content: [{ type: "text", text: result }],
+            structuredContent: { result },
+          };
+        } else {
+          const result = `Наразі немає лікарів, які спеціалізуються на цій програмі.`;
+          return {
+            content: [{ type: "text", text: result }],
+            structuredContent: { result },
+          };
+        }
+      }
+    }
 
     // Case 1: List available doctors
     if (q === "list" || q.includes("show") || q.includes("available")) {

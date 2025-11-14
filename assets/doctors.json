@@ -9,7 +9,9 @@
     "languages": ["eng"],
     "name": "Shaunni",
     "fullName": "Shaun Murphy",
-    "platformSpecialties": ["Surgery", "Diagnostics"]
+    "platformSpecialties": ["Surgery", "Diagnostics", "Endocrinology"],
+    "schedule": ["2025-11-15T09:00:00", "2025-11-15T13:00:00", "2025-11-16T10:00:00"],
+    "programs": []
   },
   {
     "_id": "2",
@@ -21,7 +23,9 @@
     "languages": ["eng", "spa"],
     "name": "Claire",
     "fullName": "Claire Browne",
-    "platformSpecialties": ["Pediatrics"]
+    "platformSpecialties": ["Pediatrics", "Gynecology", "Obstetrics", "Women's Health", "Reproductive Endocrinology"],
+    "schedule": ["2025-11-15T11:00:00", "2025-11-16T09:30:00"],
+    "programs": ["womens_health_tool"]
   },
   {
     "_id": "3",
@@ -33,7 +37,9 @@
     "languages": ["eng"],
     "name": "Aaron",
     "fullName": "Aaron Glassman",
-    "platformSpecialties": ["Neurology"]
+    "platformSpecialties": ["Neurology", "Infectious Disease"],
+    "schedule": [],
+    "programs": []
   },
   {
     "_id": "4",
@@ -45,7 +51,9 @@
     "languages": ["eng", "fra"],
     "name": "Marcus",
     "fullName": "Marcus Andrews",
-    "platformSpecialties": ["Cardiology"]
+    "platformSpecialties": ["Cardiology", "Allergy and Immunology"],
+    "schedule": ["2025-11-15T10:00:00", "2025-11-16T14:00:00"],
+    "programs": []
   },
   {
     "_id": "5",
@@ -57,7 +65,9 @@
     "languages": ["eng", "deu"],
     "name": "Jared",
     "fullName": "Jared Kalu",
-    "platformSpecialties": ["Internal Medicine"]
+    "platformSpecialties": ["Internal Medicine", "Sports Medicine"],
+    "schedule": ["2025-11-15T08:00:00", "2025-11-16T11:00:00"],
+    "programs": []
   },
   {
     "_id": "6",
@@ -69,7 +79,9 @@
     "languages": ["eng", "chi"],
     "name": "Audrey",
     "fullName": "Audrey Lim",
-    "platformSpecialties": ["Emergency Medicine"]
+    "platformSpecialties": ["Emergency Medicine", "Geriatrics", "Obstetrics", "Women's Health"],
+    "schedule": ["2025-11-15T09:00:00", "2025-11-16T13:00:00"],
+    "programs": ["womens_health_tool"]
   },
   {
     "_id": "7",
@@ -81,7 +93,9 @@
     "languages": ["eng", "kor"],
     "name": "Alex",
     "fullName": "Alex Park",
-    "platformSpecialties": ["General Surgery"]
+    "platformSpecialties": ["General Surgery", "Pain Management"],
+    "schedule": ["2025-11-15T10:30:00", "2025-11-16T14:30:00"],
+    "programs": []
   },
   {
     "_id": "8",
@@ -93,7 +107,9 @@
     "languages": ["eng", "ita"],
     "name": "Morgan",
     "fullName": "Morgan Reznick",
-    "platformSpecialties": ["Orthopedics"]
+    "platformSpecialties": ["Orthopedics", "Hematology"],
+    "schedule": ["2025-11-15T11:30:00", "2025-11-16T15:30:00"],
+    "programs": []
   },
   {
     "_id": "9",
@@ -105,7 +121,9 @@
     "languages": ["eng", "por"],
     "name": "Shaun",
     "fullName": "Shaun Mendez",
-    "platformSpecialties": ["Dermatology"]
+    "platformSpecialties": ["Dermatology", "Sleep Medicine"],
+    "schedule": ["2025-11-15T12:00:00", "2025-11-16T16:00:00"],
+    "programs": []
   },
   {
     "_id": "10",
@@ -117,7 +135,9 @@
     "languages": ["eng", "rus"],
     "name": "Leah",
     "fullName": "Leah Murphy",
-    "platformSpecialties": ["Obstetrics", "Gynecology"]
+    "platformSpecialties": ["Obstetrics", "Gynecology", "Women's Health", "Reproductive Endocrinology"],
+    "schedule": ["2025-11-15T08:30:00", "2025-11-16T12:30:00"],
+    "programs": ["womens_health_tool"]
   },
   {
     "_id": "11",
@@ -129,7 +149,9 @@
     "languages": ["eng", "jpn"],
     "name": "Ethan",
     "fullName": "Ethan Choi",
-    "platformSpecialties": ["Family Medicine"]
+    "platformSpecialties": ["Family Medicine", "Oncology"],
+    "schedule": ["2025-11-15T09:00:00", "2025-11-16T13:00:00"],
+    "programs": []
   },
   {
     "_id": "12",
@@ -141,7 +163,9 @@
     "languages": ["eng", "ukr"],
     "name": "Olivia",
     "fullName": "Olivia Moore",
-    "platformSpecialties": ["Psychiatry"]
+    "platformSpecialties": ["Psychiatry", "Psychology", "Mental Health", "Psychotherapist"],
+    "schedule": ["2025-11-15T10:00:00", "2025-11-16T14:00:00"],
+    "programs": ["mental_health_tool"]
   },
   {
     "_id": "13",
@@ -153,7 +177,9 @@
     "languages": ["eng", "spa"],
     "name": "Henry",
     "fullName": "Henry Miller",
-    "platformSpecialties": ["Radiology"]
+    "platformSpecialties": ["Radiology", "Plastic Surgery"],
+    "schedule": ["2025-11-15T11:00:00", "2025-11-16T15:00:00"],
+    "programs": []
   },
   {
     "_id": "14",
@@ -165,7 +191,9 @@
     "languages": ["eng", "fra"],
     "name": "Emma",
     "fullName": "Emma Thomas",
-    "platformSpecialties": ["Pathology"]
+    "platformSpecialties": ["Pathology", "Otolaryngology"],
+    "schedule": ["2025-11-15T10:30:00", "2025-11-16T14:30:00"],
+    "programs": []
   },
   {
     "_id": "15",
@@ -177,7 +205,9 @@
     "languages": ["eng", "spa"],
     "name": "Lucas",
     "fullName": "Lucas Jones",
-    "platformSpecialties": ["Ophthalmology"]
+    "platformSpecialties": ["Ophthalmology", "Vascular Surgery"],
+    "schedule": ["2025-11-15T09:00:00", "2025-11-16T13:00:00"],
+    "programs": []
   },
   {
     "_id": "16",
@@ -189,7 +219,9 @@
     "languages": ["eng", "pol"],
     "name": "Mia",
     "fullName": "Mia Davis",
-    "platformSpecialties": ["Anesthesiology"]
+    "platformSpecialties": ["Anesthesiology", "Addiction Medicine"],
+    "schedule": ["2025-11-15T10:00:00", "2025-11-16T14:00:00"],
+    "programs": []
   },
   {
     "_id": "17",
@@ -201,7 +233,9 @@
     "languages": ["eng", "spa"],
     "name": "Jackson",
     "fullName": "Jackson Wilson",
-    "platformSpecialties": ["Urology"]
+    "platformSpecialties": ["Urology"],
+    "schedule": ["2025-11-15T11:00:00", "2025-11-16T15:00:00"],
+    "programs": []
   },
   {
     "_id": "18",
@@ -213,7 +247,9 @@
     "languages": ["eng", "heb"],
     "name": "Ava",
     "fullName": "Ava Moore",
-    "platformSpecialties": ["Oncology"]
+    "platformSpecialties": ["Oncology"],
+    "schedule": ["2025-11-15T10:00:00", "2025-11-16T14:00:00"],
+    "programs": []
   },
   {
     "_id": "19",
@@ -225,7 +261,9 @@
     "languages": ["eng", "spa"],
     "name": "Logan",
     "fullName": "Logan Taylor",
-    "platformSpecialties": ["Gastroenterology"]
+    "platformSpecialties": ["Gastroenterology"],
+    "schedule": ["2025-11-15T09:30:00", "2025-11-16T13:30:00"],
+    "programs": []
   },
   {
     "_id": "20",
@@ -237,43 +275,51 @@
     "languages": ["eng", "ita"],
     "name": "Sophia",
     "fullName": "Sophia Anderson",
-    "platformSpecialties": ["Endocrinology"]
+    "platformSpecialties": ["Endocrinology"],
+    "schedule": ["2025-11-15T10:00:00", "2025-11-16T14:00:00"],
+    "programs": []
   },
   {
     "_id": "21",
     "status": "active",
-    "activeStates": ["Nevada", "Utah"],
-    "email": "rachel.green@gmail.com",
+    "activeStates": ["California"],
+    "email": "olga.gynecologist@gmail.com",
     "userType": {"name": "Physician", "shortCode": "PH"},
     "profileImage": "",
-    "languages": ["eng", "spa"],
-    "name": "Rachel",
-    "fullName": "Rachel Green",
-    "platformSpecialties": ["Rheumatology"]
+    "languages": ["eng", "ukr"],
+    "name": "Olga",
+    "fullName": "Olga Shevchenko",
+    "platformSpecialties": ["Gynecology", "Women's Health", "Obstetrics", "Reproductive Endocrinology"],
+    "schedule": ["2025-11-15T10:00:00", "2025-11-16T12:00:00"],
+    "programs": ["womens_health_tool"]
   },
   {
     "_id": "22",
     "status": "active",
-    "activeStates": ["Oregon"],
-    "email": "david.chen@gmail.com",
+    "activeStates": ["Texas"],
+    "email": "ivan.psychologist@gmail.com",
     "userType": {"name": "Physician", "shortCode": "PH"},
     "profileImage": "",
-    "languages": ["eng", "chi"],
-    "name": "David",
-    "fullName": "David Chen",
-    "platformSpecialties": ["Pulmonology"]
+    "languages": ["eng", "ukr"],
+    "name": "Ivan",
+    "fullName": "Ivan Kovalenko",
+    "platformSpecialties": ["Psychology", "Mental Health", "Psychiatry", "Psychotherapist"],
+    "schedule": ["2025-11-15T14:00:00", "2025-11-16T16:00:00"],
+    "programs": ["mental_health_tool"]
   },
   {
     "_id": "23",
     "status": "active",
-    "activeStates": ["Louisiana"],
-    "email": "nina.patel@gmail.com",
+    "activeStates": ["Florida"],
+    "email": "anna.nutritionist@gmail.com",
     "userType": {"name": "Physician", "shortCode": "PH"},
     "profileImage": "",
-    "languages": ["eng", "hin"],
-    "name": "Nina",
-    "fullName": "Nina Patel",
-    "platformSpecialties": ["Nephrology"]
+    "languages": ["eng", "ukr"],
+    "name": "Anna",
+    "fullName": "Anna Bondarenko",
+    "platformSpecialties": ["Nutrition", "Weight Management", "Dietology", "Endocrinology", "Obesity"],
+    "schedule": ["2025-11-15T12:00:00", "2025-11-16T15:00:00"],
+    "programs": ["weight_management_tool"]
   },
   {
     "_id": "24",
@@ -285,7 +331,9 @@
     "languages": ["eng", "kor"],
     "name": "Robert",
     "fullName": "Robert Kim",
-    "platformSpecialties": ["Infectious Disease"]
+    "platformSpecialties": ["Infectious Disease"],
+    "schedule": ["2025-11-15T10:00:00", "2025-11-16T14:00:00"],
+    "programs": []
   },
   {
     "_id": "25",
@@ -297,7 +345,9 @@
     "languages": ["eng"],
     "name": "Sarah",
     "fullName": "Sarah Johnson",
-    "platformSpecialties": ["Allergy and Immunology"]
+    "platformSpecialties": ["Allergy and Immunology"],
+    "schedule": ["2025-11-15T09:00:00", "2025-11-16T13:00:00"],
+    "programs": []
   },
   {
     "_id": "26",
@@ -309,7 +359,9 @@
     "languages": ["eng", "spa"],
     "name": "Michael",
     "fullName": "Michael Rodriguez",
-    "platformSpecialties": ["Sports Medicine"]
+    "platformSpecialties": ["Sports Medicine"],
+    "schedule": ["2025-11-15T10:00:00", "2025-11-16T14:00:00"],
+    "programs": []
   },
   {
     "_id": "27",
@@ -321,7 +373,9 @@
     "languages": ["eng", "kor"],
     "name": "Jennifer",
     "fullName": "Jennifer Lee",
-    "platformSpecialties": ["Geriatrics"]
+    "platformSpecialties": ["Geriatrics"],
+    "schedule": ["2025-11-15T09:30:00", "2025-11-16T13:30:00"],
+    "programs": []
   },
   {
     "_id": "28",
@@ -333,7 +387,9 @@
     "languages": ["eng", "deu"],
     "name": "Thomas",
     "fullName": "Thomas Brown",
-    "platformSpecialties": ["Pain Management"]
+    "platformSpecialties": ["Pain Management"],
+    "schedule": ["2025-11-15T10:00:00", "2025-11-16T14:00:00"],
+    "programs": []
   },
   {
     "_id": "29",
@@ -345,7 +401,9 @@
     "languages": ["eng", "spa"],
     "name": "Lisa",
     "fullName": "Lisa Martinez",
-    "platformSpecialties": ["Hematology"]
+    "platformSpecialties": ["Hematology"],
+    "schedule": ["2025-11-15T09:00:00", "2025-11-16T13:00:00"],
+    "programs": []
   },
   {
     "_id": "30",
@@ -357,7 +415,9 @@
     "languages": ["eng"],
     "name": "Daniel",
     "fullName": "Daniel White",
-    "platformSpecialties": ["Plastic Surgery"]
+    "platformSpecialties": ["Plastic Surgery"],
+    "schedule": ["2025-11-15T10:00:00", "2025-11-16T14:00:00"],
+    "programs": []
   },
   {
     "_id": "31",
@@ -369,7 +429,9 @@
     "languages": ["eng", "fra"],
     "name": "Amanda",
     "fullName": "Amanda Harris",
-    "platformSpecialties": ["Otolaryngology"]
+    "platformSpecialties": ["Otolaryngology"],
+    "schedule": ["2025-11-15T09:00:00", "2025-11-16T13:00:00"],
+    "programs": []
   },
   {
     "_id": "32",
@@ -381,7 +443,9 @@
     "languages": ["eng"],
     "name": "Christopher",
     "fullName": "Christopher Clark",
-    "platformSpecialties": ["Vascular Surgery"]
+    "platformSpecialties": ["Vascular Surgery"],
+    "schedule": ["2025-11-15T10:00:00", "2025-11-16T14:00:00"],
+    "programs": []
   },
   {
     "_id": "33",
@@ -393,7 +457,9 @@
     "languages": ["eng", "por"],
     "name": "Jessica",
     "fullName": "Jessica Lewis",
-    "platformSpecialties": ["Addiction Medicine"]
+    "platformSpecialties": ["Addiction Medicine"],
+    "schedule": ["2025-11-15T09:00:00", "2025-11-16T13:00:00"],
+    "programs": []
   },
   {
     "_id": "34",
@@ -405,7 +471,9 @@
     "languages": ["eng"],
     "name": "Matthew",
     "fullName": "Matthew Walker",
-    "platformSpecialties": ["Sleep Medicine"]
+    "platformSpecialties": ["Sleep Medicine"],
+    "schedule": ["2025-11-15T10:00:00", "2025-11-16T14:00:00"],
+    "programs": []
   },
   {
     "_id": "35",
@@ -417,6 +485,8 @@
     "languages": ["eng", "jpn"],
     "name": "Ashley",
     "fullName": "Ashley Hall",
-    "platformSpecialties": ["Tropical Medicine"]
+    "platformSpecialties": ["Tropical Medicine"],
+    "schedule": ["2025-11-15T09:00:00", "2025-11-16T13:00:00"],
+    "programs": []
   }
 ]
