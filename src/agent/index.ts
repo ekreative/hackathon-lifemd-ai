@@ -1,6 +1,7 @@
 import { run } from "@openai/agents";
 import { lifeMDAgent } from "./lifeMDAgent.js";
 import { ensureMcpConnection } from "./mcpServer.js";
+import { getSession } from "./lifemdSessionManager.js";
 import labResultTool from "../mcp/tools/labResult.js";
 
 export interface FileInput {
@@ -12,9 +13,11 @@ export interface FileInput {
 // Helper so the backend can trigger the agent directly
 const runLifeMdAgent = async (
   message: string,
+  conversationId?: string,
   file?: FileInput
 ): Promise<string> => {
   await ensureMcpConnection();
+  let result;
 
   // If a file is provided, call the labResult tool directly first, then pass extracted data to agent
   if (file) {
@@ -75,7 +78,12 @@ const runLifeMdAgent = async (
   }
 
   // Default: run the agent with just the message (no file or file processing failed)
-  const result = await run(lifeMDAgent, message);
+  if (conversationId) {
+    const session = getSession(conversationId);
+    result = await run(lifeMDAgent, message, { session });
+  } else {
+    result = await run(lifeMDAgent, message);
+  }
   const finalOutput = result.finalOutput;
   if (typeof finalOutput === "string") {
     return finalOutput;

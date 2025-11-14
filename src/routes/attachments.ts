@@ -3,6 +3,7 @@ import multer from "multer";
 import runLifeMdAgent from "../agent/index.js";
 import { BadRequestError } from "../errors.js";
 import { respondWithError } from "../utils/http.js";
+import { getConversationId } from "../utils/session.js";
 
 const upload = multer({ storage: multer.memoryStorage() });
 const attachmentsRouter = Router();
@@ -31,9 +32,11 @@ attachmentsRouter.post("/", upload.single("file"), async (req, res) => {
 
     // Get optional message from request body
     const userMessage = req.body?.message || "Please analyze this document.";
+    const sessionId = req.body.sessionId;
+    const conversationId = getConversationId(sessionId);
 
     // Let the agent directly read and analyze the file using vision
-    const answer = await runLifeMdAgent(userMessage, {
+    const answer = await runLifeMdAgent(userMessage, conversationId, {
       buffer: file.buffer,
       mimetype: file.mimetype,
       originalname: file.originalname,

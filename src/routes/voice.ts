@@ -2,6 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import { toFile } from "openai/uploads";
 import runLifeMdAgent from "../agent/index.js";
+import { getConversationId } from "../utils/session.js";
 import { openai } from "../mcp/openai.js";
 import { BadRequestError } from "../errors.js";
 import { respondWithError } from "../utils/http.js";
@@ -31,7 +32,9 @@ voiceRouter.post("/", upload.single("audio"), async (req, res) => {
     const transcript = validateMessage(transcription.text, "transcript");
     console.log("Transcribed text:", transcript);
 
-    const answer = await runLifeMdAgent(transcript);
+    const { sessionId } = req.body ?? {};
+    const conversationId = getConversationId(sessionId);
+    const answer = await runLifeMdAgent(transcript, conversationId);
 
     // Convert the agent's response into an mp3 so the frontend can play it back.
     const speechResponse = await openai.audio.speech.create({
