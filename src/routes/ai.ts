@@ -1,11 +1,13 @@
 import { Router, Request, Response } from "express";
 import runLifeMdAgent from "../agent/index.js";
+import { getConversationId } from "../utils/session.js";
 import { BadRequestError } from "../errors.js";
 import { respondWithError } from "../utils/http.js";
 import { validateMessage } from "../utils/validation.js";
 
 interface AIRequestBody {
     message?: string;
+    sessionId?: string; // Додаємо sessionId для ідентифікації сесії
 }
 
 const aiRouter = Router();
@@ -14,9 +16,10 @@ aiRouter.post(
     "/",
     async (req: Request<unknown, unknown, AIRequestBody>, res: Response) => {
         try {
-            const { message } = req.body ?? {};
+            const { message, sessionId } = req.body ?? {};
             const normalized = validateMessage(message, "message");
-            const answer = await runLifeMdAgent(normalized);
+            const conversationId = getConversationId(sessionId);
+            const answer = await runLifeMdAgent(normalized, conversationId);
             res.json({ answer });
         } catch (err) {
             console.error("AI error:", err);
