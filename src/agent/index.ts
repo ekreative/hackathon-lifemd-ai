@@ -63,7 +63,12 @@ const runLifeMdAgent = async (
           : `Please analyze this extracted lab result data and provide insights:\n\n${extractedData}\n\nExplain what these results mean, highlight any values that are outside normal ranges, and provide general guidance.`;
 
         // Run the agent with the extracted data (much smaller message)
-        const result = await run(lifeMDAgent, analysisMessage);
+        if (conversationId) {
+          const session = getSession(conversationId);
+          result = await run(lifeMDAgent, analysisMessage, { session });
+        } else {
+          result = await run(lifeMDAgent, analysisMessage);
+        }
 
         const finalOutput = result.finalOutput;
         if (typeof finalOutput === "string") {
