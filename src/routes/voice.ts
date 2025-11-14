@@ -28,7 +28,7 @@ voiceRouter.post("/", upload.single("audio"), async (req, res) => {
         const transcript = validateMessage(transcription.text, "transcript");
         console.log("Transcribed text:", transcript);
 
-        const answer = await runLifeMdAgent(transcript);
+        const answer = await runLifeMdAgent([transcript]);
 
         // Convert the agent's response into an mp3 so the frontend can play it back.
         const speechResponse = await openai.audio.speech.create({
