@@ -30,9 +30,25 @@ voiceRouter.post("/", upload.single("audio"), async (req, res) => {
 
         const answer = await runLifeMdAgent(transcript);
 
+        // Convert the agent's response into an mp3 so the frontend can play it back.
+        const speechResponse = await openai.audio.speech.create({
+            model: "gpt-4o-mini-tts",
+            voice: "alloy",
+            input: answer,
+            response_format: "mp3",
+        });
+
+        const audioBuffer = Buffer.from(await speechResponse.arrayBuffer());
+        const audioBase64 = audioBuffer.toString("base64");
+        const audioMimeType = "audio/mpeg";
+
         res.json({
             transcript,
             answer,
+            audio: {
+                base64: audioBase64,
+                mimeType: audioMimeType,
+            },
         });
     } catch (err) {
         console.error("Voice API error:", err);

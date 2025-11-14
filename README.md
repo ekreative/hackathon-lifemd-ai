@@ -38,7 +38,8 @@ npm start             # run compiled server (build runs automatically first)
 ### POST /api/voice
 - Content-Type: `multipart/form-data`
 - Field: `audio` (single file, e.g. `.webm`, `.wav`)
-- Response: `{ "transcript": "text", "answer": "string" }`
+- Response: `{ "transcript": "text", "answer": "string", "audio": { "mimeType": "audio/mpeg", "base64": "..." } }`
+  - `audio.base64` can be converted into a data URL on the frontend (`data:${mimeType};base64,...`) for immediate playback.
 - Errors: `400` when file missing, `500` if transcription or agent call fails.
 
 ## Development Notes
