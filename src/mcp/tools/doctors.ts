@@ -84,7 +84,7 @@ const doctorsTool: ToolRegistration = {
       result: z.string(),
     },
   },
-  handler: async ({ question }) => {
+  handler: async ({ question }: { question: string }) => {
     const raw = fs.readFileSync(doctorsPath, "utf-8");
     const allDoctors: Doctor[] = JSON.parse(raw);
     const activeDoctors = getActiveDoctors(allDoctors);
@@ -109,7 +109,7 @@ const doctorsTool: ToolRegistration = {
     if (q === "schedules" || q.includes("all schedules") || q.includes("all availability") || q.includes("all appointment")) {
       const result = `Doctors' next available times:\n${formatScheduleSummary(activeDoctors)}`;
       return {
-        content: [{ type: "text", text: result }],
+        content: [{ type: "text" as const, text: result }],
         structuredContent: { result },
       };
     }
@@ -126,7 +126,7 @@ const doctorsTool: ToolRegistration = {
         const earliest = doc.schedule && doc.schedule.length > 0 ? new Date(doc.schedule[0]).toLocaleString() : "No slots";
         const result = `Doctor ${doc.fullName} is available at: ${scheduleText}\nEarliest slot: ${earliest}`;
         return {
-          content: [{ type: "text", text: result }],
+          content: [{ type: "text" as const, text: result }],
           structuredContent: { result },
         };
       }
@@ -138,7 +138,7 @@ const doctorsTool: ToolRegistration = {
       if (!match) {
         const result = `I couldn't find a doctor with that name. Try asking to see our list of available doctors.`;
         return {
-          content: [{ type: "text", text: result }],
+          content: [{ type: "text" as const, text: result }],
           structuredContent: { result },
         };
       }
@@ -149,7 +149,7 @@ const doctorsTool: ToolRegistration = {
       const earliest = match.schedule && match.schedule.length > 0 ? new Date(match.schedule[0]).toLocaleString() : "No slots";
       const result = `Doctor ${match.fullName} is available at: ${scheduleText}\nEarliest slot: ${earliest}`;
       return {
-        content: [{ type: "text", text: result }],
+        content: [{ type: "text" as const, text: result }],
         structuredContent: { result },
       };
     }
@@ -159,7 +159,7 @@ const doctorsTool: ToolRegistration = {
       const list = activeDoctors.slice(0, 5).map(formatDoctorShort).join("\n");
       const result = `Here are some of our available doctors:\n\n${list}\n\nWe have ${activeDoctors.length} active doctors total. Ask for more details about any specific doctor.`;
       return {
-        content: [{ type: "text", text: result }],
+        content: [{ type: "text" as const, text: result }],
         structuredContent: { result },
       };
     }
@@ -176,7 +176,7 @@ const doctorsTool: ToolRegistration = {
           ...new Set(activeDoctors.flatMap((d) => d.platformSpecialties)),
         ].join(", ")}`;
         return {
-          content: [{ type: "text", text: result }],
+          content: [{ type: "text" as const, text: result }],
           structuredContent: { result },
         };
       }
@@ -184,7 +184,7 @@ const doctorsTool: ToolRegistration = {
       const list = matches.map(formatDoctorShort).join("\n");
       const result = `Doctors with ${specialty} specialty:\n\n${list}`;
       return {
-        content: [{ type: "text", text: result }],
+        content: [{ type: "text" as const, text: result }],
         structuredContent: { result },
       };
     }
@@ -201,14 +201,14 @@ const doctorsTool: ToolRegistration = {
       if (!match) {
         const result = `I couldn't find a doctor with that name. Try asking to see our list of available doctors.`;
         return {
-          content: [{ type: "text", text: result }],
+          content: [{ type: "text" as const, text: result }],
           structuredContent: { result },
         };
       }
 
       const result = formatDoctorFull(match);
       return {
-        content: [{ type: "text", text: result }],
+        content: [{ type: "text" as const, text: result }],
         structuredContent: { result },
       };
     }
@@ -231,7 +231,7 @@ const doctorsTool: ToolRegistration = {
           ", "
         )}\n\nRecommended doctors:\n\n${list}`;
         return {
-          content: [{ type: "text", text: result }],
+          content: [{ type: "text" as const, text: result }],
           structuredContent: { result },
         };
       }
@@ -240,7 +240,7 @@ const doctorsTool: ToolRegistration = {
     // Default: general response
     const result = `I can help you find doctors on our platform. You can ask to see our available doctors, search by specialty, or get details about a specific doctor.`;
     return {
-      content: [{ type: "text", text: result }],
+      content: [{ type: "text" as const, text: result }],
       structuredContent: { result },
     };
   },
