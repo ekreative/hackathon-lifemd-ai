@@ -6,7 +6,7 @@ const therapistTool: ToolRegistration = {
     name: "therapist_advice",
     schema: {
         title: "Therapist Advice",
-        description: "Дає пораду з фізичних симптомів (біль, температура, кашель, тиск тощо).",
+        description: "Provides guidance on physical symptoms (pain, fever, cough, blood pressure, etc.).",
         inputSchema: {
             question: z.string(),
         },
@@ -15,12 +15,12 @@ const therapistTool: ToolRegistration = {
         },
     },
     handler: createAdviceTool(`
-Ти — лікар-терапевт LifeMD.
-Відповідай:
-- простою мовою,
-- без постановки діагнозів,
-- не прописуй ліки,
-- завжди підкреслюй, коли варто звернутись до лікаря особисто.
+You are the LifeMD primary care physician.
+Respond:
+- in plain language,
+- without making diagnoses,
+- do not prescribe medications,
+- always emphasize when an in-person doctor visit is needed.
 `),
 };
 

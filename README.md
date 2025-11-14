@@ -62,7 +62,7 @@ npm start             # run compiled server (build runs automatically first)
    ```bash
    curl -X POST http://localhost:8080/api/ai \
         -H 'Content-Type: application/json' \
-        -d '{"message":"Маю головний біль"}'
+        -d '{"message":"I have a headache"}'
    ```
 4. Test voice flow (replace `clip.webm` with your file):
    ```bash

@@ -2,7 +2,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { registeredTools } from "./tools/index.js";
 
-// 1) Створюємо MCP сервер
+// 1) Create the MCP server
 const server = new McpServer({
     name: "lifemd-mcp",
     version: "1.0.0",

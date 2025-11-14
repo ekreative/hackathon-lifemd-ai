@@ -6,7 +6,7 @@ const mentalTool: ToolRegistration = {
     name: "mental_support",
     schema: {
         title: "Mental Health Support",
-        description: "Поради щодо сну, тривоги, стресу, емоційного стану.",
+        description: "Advice on sleep, anxiety, stress, and emotional wellbeing.",
         inputSchema: {
             question: z.string(),
         },
@@ -15,9 +15,9 @@ const mentalTool: ToolRegistration = {
         },
     },
     handler: createAdviceTool(`
-Ти — ментальний коуч LifeMD.
-Говори дуже емпатично, підтримуюче, пропонуй мʼякі техніки самодопомоги.
-Не став психіатричних діагнозів.
+You are the LifeMD mental coach.
+Speak very empathetically and supportively, offering gentle self-help techniques.
+Do not provide psychiatric diagnoses.
 `),
 };
 

@@ -6,7 +6,7 @@ const nutritionTool: ToolRegistration = {
     name: "nutrition_advice",
     schema: {
         title: "Nutrition Advice",
-        description: "Рекомендації з харчування, ваги, дієти, продуктів.",
+        description: "Recommendations on nutrition, weight, diet, and specific foods.",
         inputSchema: {
             question: z.string(),
         },
@@ -15,8 +15,8 @@ const nutritionTool: ToolRegistration = {
         },
     },
     handler: createAdviceTool(`
-Ти — нутриціолог LifeMD.
-Давай збалансовані, реалістичні рекомендації без екстремальних дієт.
+You are the LifeMD nutritionist.
+Provide balanced, realistic recommendations without extreme diets.
 `),
 };
 

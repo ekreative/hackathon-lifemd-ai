@@ -20,7 +20,7 @@ export const createAdviceTool = (systemPrompt: string): AdviceToolHandler =>
             ],
         });
 
-        const answer = completion.choices[0]?.message?.content ?? "Не вдалося сформувати відповідь.";
+        const answer = completion.choices[0]?.message?.content ?? "Failed to generate a response.";
 
         return {
             content: [{ type: "text", text: answer }],
