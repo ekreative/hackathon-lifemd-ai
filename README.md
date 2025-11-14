@@ -1,9 +1,9 @@
 # LifeMD AI Proxy
 
-Express proxy that hosts the LifeMD multi-agent workflow. It exposes HTTP endpoints that forward user text or voice prompts to an OpenAI-powered agent that can route health-related questions to Model Context Protocol (MCP) tools for therapist, nutrition, and mental-support advice.
+Express proxy that hosts the LifeMD multi-agent workflow. It exposes HTTP endpoints that forward user text or voice prompts to an OpenAI-powered agent that can route health-related questions to Model Context Protocol (MCP) tools for women's health, weight management, and mental health advice.
 
 ## Features
-- `@openai/agents` LifeMD agent wired up with three MCP tools (`therapist_advice`, `nutrition_advice`, `mental_support`).
+- `@openai/agents` LifeMD agent wired up with three MCP tools (`womens_health_tool`, `weight_management_tool`, `mental_health_tool`).
 - REST endpoint (`POST /api/ai`) for direct text prompts.
 - Voice endpoint (`POST /api/voice`) that accepts an audio file, transcribes it with OpenAI (`gpt-4o-mini-transcribe`), and funnels the transcript to the agent.
 - TypeScript source with build step that emits ESM JavaScript to `dist/`.
@@ -38,7 +38,8 @@ npm start             # run compiled server (build runs automatically first)
 ### POST /api/voice
 - Content-Type: `multipart/form-data`
 - Field: `audio` (single file, e.g. `.webm`, `.wav`)
-- Response: `{ "transcript": "text", "answer": "string" }`
+- Response: `{ "transcript": "text", "answer": "string", "audio": { "mimeType": "audio/mpeg", "base64": "..." } }`
+  - `audio.base64` can be converted into a data URL on the frontend (`data:${mimeType};base64,...`) for immediate playback.
 - Errors: `400` when file missing, `500` if transcription or agent call fails.
 
 ## Development Notes
