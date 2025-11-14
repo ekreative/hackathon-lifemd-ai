@@ -34,7 +34,7 @@ interface Doctor {
   name: string;
   fullName: string;
   platformSpecialties: string[];
-  programs?: string[]; // Додаємо поле для програм
+  programs?: string[];
 }
 
 // Ключові слова для програм
@@ -49,16 +49,30 @@ function formatDoctorShort(doc: Doctor): string {
 }
 
 function formatDoctorFull(doc: Doctor): string {
+  let scheduleText = "No available times.";
+  if (doc.schedule && doc.schedule.length > 0) {
+    scheduleText = doc.schedule.map((s) => new Date(s).toLocaleString()).join(", ");
+  }
   return `Doctor: ${doc.fullName}
 Status: ${doc.status}
 Specialties: ${doc.platformSpecialties.join(", ")}
 Active States: ${doc.activeStates.join(", ")}
 Languages: ${doc.languages.join(", ")}
-Email: ${doc.email}`;
+Email: ${doc.email}
+Available times: ${scheduleText}`;
 }
 
 function getActiveDoctors(doctors: Doctor[]): Doctor[] {
   return doctors.filter((d) => d.status === "active");
+}
+
+function formatScheduleSummary(doctors: Doctor[]): string {
+  return doctors
+    .map((doc) => {
+      const nextSlot = doc.schedule && doc.schedule.length > 0 ? new Date(doc.schedule[0]).toLocaleString() : "No slots";
+      return `${doc.fullName}: ${nextSlot}`;
+    })
+    .join("\n");
 }
 
 const doctorsTool: ToolRegistration = {
@@ -70,21 +84,21 @@ const doctorsTool: ToolRegistration = {
       question: z
         .string()
         .describe(
-          "Search query: 'list', 'specialty:X', 'doctor:Name', or 'search:problem'"
+          "Search query: 'list', 'specialty:X', 'doctor:Name', 'search:problem', 'schedule:Name', or 'schedules'"
         ),
     },
     outputSchema: {
       result: z.string(),
     },
   },
-  handler: async ({ question }) => {
+  handler: async ({ question }: { question: string }) => {
     const raw = fs.readFileSync(doctorsPath, "utf-8");
     const allDoctors: Doctor[] = JSON.parse(raw);
     const activeDoctors = getActiveDoctors(allDoctors);
 
     const q = question.trim().toLowerCase();
 
-    // Перевірка на запит про програму
+    // Check program
     for (const program of programKeywords) {
       if (program.words.some(w => q.includes(w))) {
         const matches = activeDoctors.filter(doc => doc.programs && doc.programs.includes(program.key));
@@ -106,12 +120,75 @@ ${list}`;
       }
     }
 
+    // Keywords for schedule/availability queries
+    const scheduleKeywords = [
+      "schedule", "availability", "available", "appointment", "sign up", "book", "next time", "when can", "when is", "when are", "times", "slots"
+    ];
+
+    // Helper: find doctor by name (fuzzy)
+    function findDoctorByName(query: string): Doctor | undefined {
+      return allDoctors.find(
+        (doc) =>
+          doc.fullName.toLowerCase().includes(query) ||
+          doc.name.toLowerCase().includes(query)
+      );
+    }
+
+    // 1. If query is about all doctors' schedules
+    if (q === "schedules" || q.includes("all schedules") || q.includes("all availability") || q.includes("all appointment")) {
+      const result = `Doctors' next available times:\n${formatScheduleSummary(activeDoctors)}`;
+      return {
+        content: [{ type: "text" as const, text: result }],
+        structuredContent: { result },
+      };
+    }
+
+    // 2. If query is about a specific doctor's schedule (flexible matching)
+    // Try to extract doctor name from query if any schedule keyword is present
+    for (const doc of allDoctors) {
+      const nameLower = doc.fullName.toLowerCase();
+      if (q.includes(nameLower) && scheduleKeywords.some(k => q.includes(k))) {
+        let scheduleText = "No available times.";
+        if (doc.schedule && doc.schedule.length > 0) {
+          scheduleText = doc.schedule.map((s) => new Date(s).toLocaleString()).join(", ");
+        }
+        const earliest = doc.schedule && doc.schedule.length > 0 ? new Date(doc.schedule[0]).toLocaleString() : "No slots";
+        const result = `Doctor ${doc.fullName} is available at: ${scheduleText}\nEarliest slot: ${earliest}`;
+        return {
+          content: [{ type: "text" as const, text: result }],
+          structuredContent: { result },
+        };
+      }
+    }
+    // Also support: 'schedule:Name', 'availability for Name', 'next available for Name', 'available times for Name'
+    if (q.startsWith("schedule:") || q.includes("availability for") || q.includes("next available for") || q.includes("available times for")) {
+      let name = q.replace("schedule:", "").replace("availability for", "").replace("next available for", "").replace("available times for", "").trim();
+      const match = findDoctorByName(name);
+      if (!match) {
+        const result = `I couldn't find a doctor with that name. Try asking to see our list of available doctors.`;
+        return {
+          content: [{ type: "text" as const, text: result }],
+          structuredContent: { result },
+        };
+      }
+      let scheduleText = "No available times.";
+      if (match.schedule && match.schedule.length > 0) {
+        scheduleText = match.schedule.map((s) => new Date(s).toLocaleString()).join(", ");
+      }
+      const earliest = match.schedule && match.schedule.length > 0 ? new Date(match.schedule[0]).toLocaleString() : "No slots";
+      const result = `Doctor ${match.fullName} is available at: ${scheduleText}\nEarliest slot: ${earliest}`;
+      return {
+        content: [{ type: "text" as const, text: result }],
+        structuredContent: { result },
+      };
+    }
+
     // Case 1: List available doctors
     if (q === "list" || q.includes("show") || q.includes("available")) {
       const list = activeDoctors.slice(0, 5).map(formatDoctorShort).join("\n");
       const result = `Here are some of our available doctors:\n\n${list}\n\nWe have ${activeDoctors.length} active doctors total. Ask for more details about any specific doctor.`;
       return {
-        content: [{ type: "text", text: result }],
+        content: [{ type: "text" as const, text: result }],
         structuredContent: { result },
       };
     }
@@ -128,7 +205,7 @@ ${list}`;
           ...new Set(activeDoctors.flatMap((d) => d.platformSpecialties)),
         ].join(", ")}`;
         return {
-          content: [{ type: "text", text: result }],
+          content: [{ type: "text" as const, text: result }],
           structuredContent: { result },
         };
       }
@@ -136,7 +213,7 @@ ${list}`;
       const list = matches.map(formatDoctorShort).join("\n");
       const result = `Doctors with ${specialty} specialty:\n\n${list}`;
       return {
-        content: [{ type: "text", text: result }],
+        content: [{ type: "text" as const, text: result }],
         structuredContent: { result },
       };
     }
@@ -153,14 +230,14 @@ ${list}`;
       if (!match) {
         const result = `I couldn't find a doctor with that name. Try asking to see our list of available doctors.`;
         return {
-          content: [{ type: "text", text: result }],
+          content: [{ type: "text" as const, text: result }],
           structuredContent: { result },
         };
       }
 
       const result = formatDoctorFull(match);
       return {
-        content: [{ type: "text", text: result }],
+        content: [{ type: "text" as const, text: result }],
         structuredContent: { result },
       };
     }
@@ -183,7 +260,7 @@ ${list}`;
           ", "
         )}\n\nRecommended doctors:\n\n${list}`;
         return {
-          content: [{ type: "text", text: result }],
+          content: [{ type: "text" as const, text: result }],
           structuredContent: { result },
         };
       }
@@ -192,7 +269,7 @@ ${list}`;
     // Default: general response
     const result = `I can help you find doctors on our platform. You can ask to see our available doctors, search by specialty, or get details about a specific doctor.`;
     return {
-      content: [{ type: "text", text: result }],
+      content: [{ type: "text" as const, text: result }],
       structuredContent: { result },
     };
   },
