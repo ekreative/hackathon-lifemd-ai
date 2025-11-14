@@ -1,9 +1,9 @@
 # LifeMD AI Proxy
 
-Express proxy that hosts the LifeMD multi-agent workflow. It exposes HTTP endpoints that forward user text or voice prompts to an OpenAI-powered agent that can route health-related questions to Model Context Protocol (MCP) tools for therapist, nutrition, and mental-support advice.
+Express proxy that hosts the LifeMD multi-agent workflow. It exposes HTTP endpoints that forward user text or voice prompts to an OpenAI-powered agent that can route health-related questions to Model Context Protocol (MCP) tools for women's health, weight management, and mental health advice.
 
 ## Features
-- `@openai/agents` LifeMD agent wired up with three MCP tools (`therapist_advice`, `nutrition_advice`, `mental_support`).
+- `@openai/agents` LifeMD agent wired up with three MCP tools (`womens_health_tool`, `weight_management_tool`, `mental_health_tool`).
 - REST endpoint (`POST /api/ai`) for direct text prompts.
 - Voice endpoint (`POST /api/voice`) that accepts an audio file, transcribes it with OpenAI (`gpt-4o-mini-transcribe`), and funnels the transcript to the agent.
 - TypeScript source with build step that emits ESM JavaScript to `dist/`.

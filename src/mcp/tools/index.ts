@@ -1,9 +1,9 @@
-import mentalTool from "./mental.js";
-import nutritionTool from "./nutrition.js";
-import therapistTool from "./therapist.js";
+import mentalHealthTool from "./mentalHealth.js";
+import weightManagementTool from "./weightManagement.js";
+import womensHealthTool from "./womensHealth.js";
 import type { ToolRegistration } from "./types.js";
 
-export const registeredTools: ToolRegistration[] = [therapistTool, nutritionTool, mentalTool];
+export const registeredTools: ToolRegistration[] = [womensHealthTool, weightManagementTool, mentalHealthTool];
 
 export type { ToolRegistration } from "./types.js";
 export { createAdviceTool } from "./createAdviceTool.js";
