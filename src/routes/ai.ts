@@ -10,8 +10,8 @@ interface AIRequestBody {
 }
 
 const aiRouter = Router();
-
 // Зберігаємо історію повідомлень для кожної сесії (тільки в оперативній пам'яті)
+
 // Ключ: sessionId, Значення: масив повідомлень
 const sessionHistory = new Map<string, string[]>();
 
@@ -21,13 +21,19 @@ aiRouter.post(
         try {
             const { message, sessionId } = req.body ?? {};
             const normalized = validateMessage(message, "message");
-            const sid = sessionId || "default";
-            const history = sessionHistory.get(sid) || [];
-            history.push(normalized);
-            if (history.length > 20) history.splice(0, history.length - 20);
-            sessionHistory.set(sid, history);
-            // Передаємо всю історію у агент
-            const answer = await runLifeMdAgent(history);
+            let answer;
+            if (!sessionId) {
+                // Якщо немає sessionId, працюємо лише з поточним повідомленням
+                answer = await runLifeMdAgent([normalized]);
+            } else {
+                // Якщо є sessionId, працюємо з історією
+                const sid = sessionId;
+                const history = sessionHistory.get(sid) || [];
+                history.push(normalized);
+                if (history.length > 20) history.splice(0, history.length - 20);
+                sessionHistory.set(sid, history);
+                answer = await runLifeMdAgent(history);
+            }
             res.json({ answer });
         } catch (err) {
             console.error("AI error:", err);
