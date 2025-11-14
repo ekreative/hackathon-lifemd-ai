@@ -7,7 +7,7 @@ import { validateMessage } from "../utils/validation.js";
 
 interface AIRequestBody {
     message?: string;
-    sessionId?: string; // Додаємо sessionId для ідентифікації сесії
+    sessionId?: string; // Add sessionId for session identification
 }
 
 const aiRouter = Router();
